@@ -1,10 +1,13 @@
 package com.example.onlinebookstore.service;
 
-import com.example.onlinebookstore.model.Book;
+import com.example.onlinebookstore.dto.BookDto;
+import com.example.onlinebookstore.dto.CreateBookRequestDto;
 import java.util.List;
 
 public interface BookService {
-    Book save(Book book);
+    BookDto save(CreateBookRequestDto requestDto);
 
-    List<Book> findAll();
+    BookDto findById(Long id);
+
+    List<BookDto> findAll();
 }
