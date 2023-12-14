@@ -12,6 +12,7 @@ public class CreateBookRequestDto {
     @Size(min = 1, max = 100)
     private String title;
     @NotNull
+    @Size(min = 1, max = 40)
     private String author;
     @NotNull
     @Size(min = 10, max = 13)
