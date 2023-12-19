@@ -8,6 +8,7 @@ import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.repository.BookRepository;
 import com.example.onlinebookstore.service.BookService;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,14 +50,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto updateById(Long id, CreateBookRequestDto requestDto) {
-        try {
-            Book book = bookMapper.toModel(requestDto);
-            book.setId(id);
-            return bookMapper.toDto(bookRepository.save(book));
-        } catch (EntityNotFoundException e) {
+        Optional<Book> existingBook = bookRepository.findById(id);
+        if (existingBook.isEmpty()) {
             throw new EntityNotFoundException(
                     "The book with ID: " + id + ", unfortunately was not be founded."
             );
         }
+        Book book = bookMapper.toModel(requestDto);
+        book.setId(id);
+        return bookMapper.toDto(bookRepository.save(book));
     }
 }

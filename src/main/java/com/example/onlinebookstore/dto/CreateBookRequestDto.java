@@ -5,17 +5,17 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import lombok.Data;
+import org.hibernate.validator.constraints.ISBN;
 
 @Data
 public class CreateBookRequestDto {
-    @NotNull
     @Size(min = 1, max = 100)
     private String title;
     @NotNull
     @Size(min = 1, max = 40)
     private String author;
     @NotNull
-    @Size(min = 10, max = 13)
+    @ISBN
     private String isbn;
     @NotNull
     @Positive
