@@ -29,7 +29,7 @@ public class BookServiceImpl implements BookService {
     public BookDto findById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException(
-                        "The book with ID: id " + id + ", unfortunately was not be found."
+                        "The book with ID: " + id + ", unfortunately was not be found."
                 )
         );
         return bookMapper.toDto(book);
@@ -55,7 +55,7 @@ public class BookServiceImpl implements BookService {
             return bookMapper.toDto(bookRepository.save(book));
         } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException(
-                    "The book with ID: id " + id + ", unfortunately was not be founded."
+                    "The book with ID: " + id + ", unfortunately was not be founded."
             );
         }
     }
