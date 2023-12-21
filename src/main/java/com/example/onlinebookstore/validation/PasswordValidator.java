@@ -4,7 +4,8 @@ import com.example.onlinebookstore.dto.user.UserRegistrationRequestDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PasswordValidator implements ConstraintValidator<FieldMatch, UserRegistrationRequestDto> {
+public class PasswordValidator
+        implements ConstraintValidator<FieldMatch, UserRegistrationRequestDto> {
     @Override
     public boolean isValid(UserRegistrationRequestDto requestDto,
                            ConstraintValidatorContext constraintValidatorContext) {
