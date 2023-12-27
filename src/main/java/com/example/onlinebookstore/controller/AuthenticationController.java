@@ -1,8 +1,11 @@
 package com.example.onlinebookstore.controller;
 
+import com.example.onlinebookstore.dto.user.UserLoginRequestDto;
+import com.example.onlinebookstore.dto.user.UserLoginResponseDto;
 import com.example.onlinebookstore.dto.user.UserRegistrationRequestDto;
 import com.example.onlinebookstore.dto.user.UserResponseDto;
 import com.example.onlinebookstore.exception.RegistrationException;
+import com.example.onlinebookstore.security.AuthenticationService;
 import com.example.onlinebookstore.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,8 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/auth")
 public class AuthenticationController {
-
     private final UserService userService;
+    private final AuthenticationService authenticationService;
+
+    @PostMapping("/login")
+    public UserLoginResponseDto login(@RequestBody UserLoginRequestDto requestDto) {
+        return authenticationService.authenticate(requestDto);
+    }
 
     @PostMapping("/registration")
     @Operation(summary = "Register a new user",
