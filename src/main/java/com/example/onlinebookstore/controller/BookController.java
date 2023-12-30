@@ -1,6 +1,6 @@
 package com.example.onlinebookstore.controller;
 
-import com.example.onlinebookstore.dto.book.BookDto;
+import com.example.onlinebookstore.dto.book.BookResponseDto;
 import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.onlinebookstore.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +33,7 @@ public class BookController {
     @GetMapping
     @Operation(summary = "Get all books",
             description = "Get a list of all existing books")
-    public List<BookDto> getAll(Pageable pageable) {
+    public List<BookResponseDto> getAll(Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
@@ -41,7 +41,7 @@ public class BookController {
     @GetMapping("/{id}")
     @Operation(summary = "Get book by ID",
             description = "Return a book by identifier")
-    public BookDto getBookById(@PathVariable Long id) {
+    public BookResponseDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
@@ -50,7 +50,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create new book",
             description = "Create a new book")
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
+    public BookResponseDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
@@ -58,8 +58,8 @@ public class BookController {
     @PutMapping("/{id}")
     @Operation(summary = "Update book by ID",
             description = "Updates book parameters with a new one")
-    public BookDto updateBookById(@PathVariable Long id,
-                                  @RequestBody @Valid CreateBookRequestDto requestDto) {
+    public BookResponseDto updateBookById(@PathVariable Long id,
+                                          @RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.updateById(id, requestDto);
     }
 
