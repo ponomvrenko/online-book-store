@@ -1,5 +1,6 @@
 package com.example.onlinebookstore.controller;
 
+import com.example.onlinebookstore.dto.order.OrderPlaceRequestDto;
 import com.example.onlinebookstore.dto.order.OrderResponseDto;
 import com.example.onlinebookstore.dto.order.item.OrderItemResponseDto;
 import com.example.onlinebookstore.model.User;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,4 +50,12 @@ public class OrderController {
         return orderService.findOrderItemByItemIdAndOrderId(itemId, orderId);
     }
 
+    @PostMapping
+    public OrderResponseDto placeOrder(
+            @RequestBody OrderPlaceRequestDto requestDto,
+            Authentication authentication
+    ) {
+        User user = (User) authentication.getPrincipal();
+        return orderService.placeOrder(user.getId(), requestDto);
+    }
 }

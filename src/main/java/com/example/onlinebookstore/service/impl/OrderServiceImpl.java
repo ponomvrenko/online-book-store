@@ -1,14 +1,25 @@
 package com.example.onlinebookstore.service.impl;
 
+import com.example.onlinebookstore.dto.order.OrderPlaceRequestDto;
 import com.example.onlinebookstore.dto.order.OrderResponseDto;
 import com.example.onlinebookstore.dto.order.item.OrderItemResponseDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.OrderItemMapper;
 import com.example.onlinebookstore.mapper.OrderMapper;
+import com.example.onlinebookstore.model.Book;
+import com.example.onlinebookstore.model.CartItem;
+import com.example.onlinebookstore.model.Order;
 import com.example.onlinebookstore.model.OrderItem;
+import com.example.onlinebookstore.model.ShoppingCart;
+import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.repository.OrderItemRepository;
 import com.example.onlinebookstore.repository.OrderRepository;
+import com.example.onlinebookstore.repository.ShoppingCartRepository;
+import com.example.onlinebookstore.repository.UserRepository;
 import com.example.onlinebookstore.service.OrderService;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +34,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
+    private final UserRepository userRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
 
 
     @Override
@@ -51,5 +64,53 @@ public class OrderServiceImpl implements OrderService {
                 )
         );
         return orderItemMapper.toDto(orderItem);
+    }
+
+    @Override
+    @Transactional
+    public OrderResponseDto placeOrder(Long userId, OrderPlaceRequestDto requestDto) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException(
+                        "Can't find user by this ID: " + userId
+                )
+        );
+
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId).orElseThrow(
+                () -> new EntityNotFoundException(
+                        "Can't find shopping cart for user with ID: " + userId
+                )
+        );
+
+        Order order = new Order();
+        order.setUser(user);
+        order.setStatus(Order.Status.valueOf(Order.Status.PENDING.name()));
+        order.setShippingAddress(requestDto.getShippingAddress());
+        order.setTotal(countTotalPrice(shoppingCart));
+        order.setOrderDate(LocalDateTime.now());
+        order = orderRepository.save(order);
+
+        Set<OrderItem> orderItems = new HashSet<>(shoppingCart.getCartItems().size());
+        for (CartItem cartItem : shoppingCart.getCartItems()) {
+            Book book = cartItem.getBook();
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setBook(book);
+            orderItem.setOrder(order);
+            orderItem.setPrice(book.getPrice());
+            orderItemRepository.save(orderItem);
+        }
+        order.setOrderItems(orderItems);
+        return orderMapper.toDto(order);
+    }
+
+    private BigDecimal countTotalPrice(ShoppingCart shoppingCart) {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (CartItem cartItem : shoppingCart.getCartItems()) {
+            BigDecimal itemTotalPrice = cartItem.getBook().getPrice()
+                    .multiply(BigDecimal.valueOf(cartItem.getQuantity()));
+            totalPrice = totalPrice.add(itemTotalPrice);
+        }
+        return totalPrice;
     }
 }
