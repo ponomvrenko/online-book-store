@@ -33,32 +33,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             CartItemRequestDto requestDto,
             Long userId
     ) {
-        CartItem cartItem = new CartItem();
-        cartItem.setQuantity(requestDto.getQuantity());
-
-        Long bookId = requestDto.getBookId();
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Can't find book by this ID: " + bookId
-                ));
-        cartItem.setBook(book);
-
+        CartItem cartItem = cartItemFormationWithoutShoppingCart(requestDto);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find user by this ID: " + userId
                 ));
-        ShoppingCart shoppingCartFromDB =
-                shoppingCartRepository.findByUserId(userId)
-                        .orElseGet(() -> {
-                            ShoppingCart shoppingCart = new ShoppingCart();
-                            shoppingCart.setUser(user);
-                            shoppingCartRepository.save(shoppingCart);
-                            return shoppingCart;
-                        });
+        ShoppingCart shoppingCartFromDB = shoppingCartRepository.findByUserId(userId)
+                .orElseGet(() -> {
+                    ShoppingCart shoppingCart = new ShoppingCart();
+                    shoppingCart.setUser(user);
+                    shoppingCartRepository.save(shoppingCart);
+                    return shoppingCart;
+                });
         cartItem.setShoppingCart(shoppingCartFromDB);
         cartItemRepository.save(cartItem);
         shoppingCartFromDB.getCartItems().add(cartItem);
-
         return shoppingCartMapper.toDto(shoppingCartFromDB);
     }
 
@@ -75,8 +64,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             Long userId
     ) {
         ShoppingCart shoppingCart = findShoppingCartByUserId(userId);
-        CartItem cartItem =
-                findCartItemByShoppingCartIdAndCartItemId(cartItemId, shoppingCart);
+        CartItem cartItem = findCartItemByCartItemId(cartItemId);
         cartItem.setQuantity(requestDto.getQuantity());
         cartItemRepository.save(cartItem);
         return shoppingCartMapper.toDto(shoppingCart);
@@ -84,17 +72,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void deleteCartItemById(Long userId, Long cartItemId) {
-        ShoppingCart shoppingCart = findShoppingCartByUserId(userId);
-        CartItem cartItem =
-                findCartItemByShoppingCartIdAndCartItemId(cartItemId, shoppingCart);
+        CartItem cartItem = findCartItemByCartItemId(cartItemId);
         cartItemRepository.delete(cartItem);
     }
 
-    private CartItem findCartItemByShoppingCartIdAndCartItemId(
-            Long cartItemId,
-            ShoppingCart shoppingCart
-    ) {
-        return cartItemRepository.findByIdAndShoppingCartId(cartItemId, shoppingCart.getId())
+    private CartItem findCartItemByCartItemId(Long cartItemId) {
+        return cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find cart item by this "
                                 + "item ID: " + cartItemId
@@ -107,5 +90,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         "Can't find shopping cart by this "
                                 + "user ID: " + userId
                 ));
+    }
+
+    private CartItem cartItemFormationWithoutShoppingCart(CartItemRequestDto requestDto) {
+        CartItem cartItem = new CartItem();
+        cartItem.setQuantity(requestDto.getQuantity());
+        Long bookId = requestDto.getBookId();
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Can't find book by this ID: " + bookId
+                ));
+        cartItem.setBook(book);
+        return cartItem;
     }
 }
