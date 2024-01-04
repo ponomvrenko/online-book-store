@@ -6,10 +6,13 @@ import com.example.onlinebookstore.dto.order.OrderUpdateRequestDto;
 import com.example.onlinebookstore.dto.order.item.OrderItemResponseDto;
 import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.service.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +23,9 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     private final OrderService orderService;
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
+    @Operation(summary = "Get orders history")
     public Set<OrderResponseDto> getOrdersHistory(
             Authentication authentication,
             Pageable pageable
@@ -29,7 +34,9 @@ public class OrderController {
         return orderService.findOrderHistory(user.getId(), pageable);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{orderId}/items")
+    @Operation(summary = "Get a set of order items by specific order id")
     public Set<OrderItemResponseDto> getOrderItemsByOrderId(
             @PathVariable Long orderId,
             Pageable pageable
@@ -37,7 +44,9 @@ public class OrderController {
         return orderService.findOrderItemsByOrderId(orderId, pageable);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{orderId}/items/{itemId}")
+    @Operation(summary = "Get order items by specific order id & item id")
     public OrderItemResponseDto getOrderItemByOrderIdAndItemId(
             @PathVariable Long orderId,
             @PathVariable Long itemId
@@ -45,7 +54,10 @@ public class OrderController {
         return orderService.findOrderItemByItemIdAndOrderId(itemId, orderId);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Place an order")
     public OrderResponseDto placeOrder(
             @RequestBody OrderPlaceRequestDto requestDto,
             Authentication authentication
@@ -54,7 +66,9 @@ public class OrderController {
         return orderService.placeOrder(user.getId(), requestDto);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/{id}")
+    @Operation(summary = "Update order status")
     public OrderResponseDto updateOrderStatus(
             @PathVariable Long id,
             @RequestBody OrderUpdateRequestDto requestDto
