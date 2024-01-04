@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,7 +34,7 @@ public class ShoppingCart {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "shoppingCart")
-    private Set<CartItem> cartItems;
+    private Set<CartItem> cartItems = new HashSet<>();
     @Column(nullable = false)
     private boolean isDeleted = false;
 }
