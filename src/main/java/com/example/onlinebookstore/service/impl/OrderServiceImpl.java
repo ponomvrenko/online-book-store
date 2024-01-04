@@ -2,6 +2,7 @@ package com.example.onlinebookstore.service.impl;
 
 import com.example.onlinebookstore.dto.order.OrderPlaceRequestDto;
 import com.example.onlinebookstore.dto.order.OrderResponseDto;
+import com.example.onlinebookstore.dto.order.OrderUpdateRequestDto;
 import com.example.onlinebookstore.dto.order.item.OrderItemResponseDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.OrderItemMapper;
@@ -101,6 +102,17 @@ public class OrderServiceImpl implements OrderService {
             orderItemRepository.save(orderItem);
         }
         order.setOrderItems(orderItems);
+        return orderMapper.toDto(order);
+    }
+
+    @Override
+    public OrderResponseDto updateOrderStatus(Long orderId, OrderUpdateRequestDto requestDto) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+                () -> new EntityNotFoundException(
+                        "Can't find order by current ID: " + orderId
+                )
+        );
+        order.setStatus(Order.Status.valueOf(requestDto.getStatus()));
         return orderMapper.toDto(order);
     }
 

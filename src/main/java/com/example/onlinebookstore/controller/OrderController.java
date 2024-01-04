@@ -2,21 +2,16 @@ package com.example.onlinebookstore.controller;
 
 import com.example.onlinebookstore.dto.order.OrderPlaceRequestDto;
 import com.example.onlinebookstore.dto.order.OrderResponseDto;
+import com.example.onlinebookstore.dto.order.OrderUpdateRequestDto;
 import com.example.onlinebookstore.dto.order.item.OrderItemResponseDto;
 import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.service.OrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Set;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Order management", description = "Endpoints for managing orders")
 @RestController
@@ -57,5 +52,13 @@ public class OrderController {
     ) {
         User user = (User) authentication.getPrincipal();
         return orderService.placeOrder(user.getId(), requestDto);
+    }
+
+    @PatchMapping("/{id}")
+    public OrderResponseDto updateOrderStatus(
+            @PathVariable Long id,
+            @RequestBody OrderUpdateRequestDto requestDto
+    ) {
+        return orderService.updateOrderStatus(id, requestDto);
     }
 }
