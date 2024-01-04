@@ -37,18 +37,16 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItem.setQuantity(requestDto.getQuantity());
 
         Long bookId = requestDto.getBookId();
-        Book book = bookRepository.findById(bookId).orElseThrow(
-                () -> new EntityNotFoundException(
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find book by this ID: " + bookId
-                )
-        );
+                ));
         cartItem.setBook(book);
 
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException(
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find user by this ID: " + userId
-                )
-        );
+                ));
         ShoppingCart shoppingCartFromDB =
                 shoppingCartRepository.findByUserId(userId)
                         .orElseGet(() -> {
@@ -92,7 +90,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItemRepository.delete(cartItem);
     }
 
-    private CartItem findCartItemByShoppingCartIdAndCartItemId(Long cartItemId, ShoppingCart shoppingCart) {
+    private CartItem findCartItemByShoppingCartIdAndCartItemId(
+            Long cartItemId,
+            ShoppingCart shoppingCart
+    ) {
         return cartItemRepository.findByIdAndShoppingCartId(cartItemId, shoppingCart.getId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find cart item by this "
