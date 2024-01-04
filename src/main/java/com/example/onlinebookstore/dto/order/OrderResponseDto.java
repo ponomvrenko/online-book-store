@@ -1,11 +1,10 @@
 package com.example.onlinebookstore.dto.order;
 
 import com.example.onlinebookstore.dto.order.item.OrderItemResponseDto;
-import lombok.Data;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
+import lombok.Data;
 
 @Data
 public class OrderResponseDto {

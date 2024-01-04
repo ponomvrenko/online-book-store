@@ -38,7 +38,6 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final ShoppingCartRepository shoppingCartRepository;
 
-
     @Override
     public Set<OrderItemResponseDto> findOrderItemsByOrderId(Long orderId, Pageable pageable) {
         return orderItemRepository.findAll(pageable)

@@ -92,7 +92,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItemRepository.delete(cartItem);
     }
 
-    private CartItem findCartItemByShoppingCartIdAndCartItemId(Long cartItemId, ShoppingCart shoppingCart) {
+    private CartItem findCartItemByShoppingCartIdAndCartItemId(
+            Long cartItemId,
+            ShoppingCart shoppingCart
+    ) {
         return cartItemRepository.findByIdAndShoppingCartId(cartItemId, shoppingCart.getId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find cart item by this "
