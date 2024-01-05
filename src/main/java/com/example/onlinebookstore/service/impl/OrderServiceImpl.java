@@ -112,6 +112,7 @@ public class OrderServiceImpl implements OrderService {
                 )
         );
         order.setStatus(Order.Status.valueOf(requestDto.getStatus()));
+        orderRepository.save(order);
         return orderMapper.toDto(order);
     }
 
