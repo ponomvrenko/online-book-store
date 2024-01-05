@@ -33,22 +33,22 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             CartItemRequestDto requestDto,
             Long userId
     ) {
-        CartItem cartItem = cartItemFormationWithoutShoppingCart(requestDto);
+        CartItem cartItem = createCartItemWithoutShoppingCart(requestDto);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find user by this ID: " + userId
                 ));
-        ShoppingCart shoppingCartFromDB = shoppingCartRepository.findByUserIdWithCartItems(userId)
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserIdWithCartItems(userId)
                 .orElseGet(() -> {
-                    ShoppingCart shoppingCart = new ShoppingCart();
-                    shoppingCart.setUser(user);
-                    shoppingCartRepository.save(shoppingCart);
-                    return shoppingCart;
+                    ShoppingCart newShoppingCart = new ShoppingCart();
+                    newShoppingCart.setUser(user);
+                    shoppingCartRepository.save(newShoppingCart);
+                    return newShoppingCart;
                 });
-        cartItem.setShoppingCart(shoppingCartFromDB);
+        cartItem.setShoppingCart(shoppingCart);
         cartItemRepository.save(cartItem);
-        shoppingCartFromDB.getCartItems().add(cartItem);
-        return shoppingCartMapper.toDto(shoppingCartFromDB);
+        shoppingCart.getCartItems().add(cartItem);
+        return shoppingCartMapper.toDto(shoppingCart);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 ));
     }
 
-    private CartItem cartItemFormationWithoutShoppingCart(CartItemRequestDto requestDto) {
+    private CartItem createCartItemWithoutShoppingCart(CartItemRequestDto requestDto) {
         CartItem cartItem = new CartItem();
         cartItem.setQuantity(requestDto.getQuantity());
         Long bookId = requestDto.getBookId();
