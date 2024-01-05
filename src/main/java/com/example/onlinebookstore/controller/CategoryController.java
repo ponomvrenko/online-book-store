@@ -32,7 +32,7 @@ public class CategoryController {
     private final BookService bookService;
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     @Operation(summary = "Get all categories",
             description = "Get a list of all existing categories")
     public List<CategoryResponseDto> getAll(Pageable pageable) {
@@ -40,7 +40,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create new category",
             description = "Create a new category")
@@ -49,7 +49,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     @Operation(summary = "Get category by ID",
             description = "Return a category by identifier")
     public CategoryResponseDto getCategoryById(@PathVariable Long id) {
@@ -57,7 +57,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Update category by ID",
             description = "Updates category parameters with a new one")
     public CategoryResponseDto updateCategory(@PathVariable Long id,
@@ -66,7 +66,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete category by ID",
             description = "Removes the category")
@@ -75,7 +75,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}/books")
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     @Operation(summary = "Get books by category ID",
             description = "Return a list of all books that matches this category ID")
     public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(
