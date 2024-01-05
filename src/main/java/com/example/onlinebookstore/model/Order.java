@@ -19,13 +19,13 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.type.SqlTypes;
 
 @Entity
 @Data
 @SQLDelete(sql = "UPDATE orders SET is_deleted = true WHERE id=?")
-@Where(clause = "is_deleted=false")
+@SQLRestriction("is_deleted=false")
 @Table(name = "orders")
 public class Order {
     @Id
