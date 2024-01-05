@@ -38,7 +38,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find user by this ID: " + userId
                 ));
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserIdWithCartItems(userId)
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId)
                 .orElseGet(() -> {
                     ShoppingCart newShoppingCart = new ShoppingCart();
                     newShoppingCart.setUser(user);
@@ -85,7 +85,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     private ShoppingCart findShoppingCartByUserId(Long userId) {
-        return shoppingCartRepository.findByUserIdWithCartItems(userId)
+        return shoppingCartRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find shopping cart by this "
                                 + "user ID: " + userId
