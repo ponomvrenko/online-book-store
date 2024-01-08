@@ -81,18 +81,16 @@ public class OrderServiceImpl implements OrderService {
                 )
         );
 
-        Order order = new Order();
-        order.setUser(user);
-        order.setStatus(Order.Status.valueOf(Order.Status.PENDING.name()));
-        order.setShippingAddress(requestDto.getShippingAddress());
-        order.setTotal(countTotalPrice(shoppingCart));
-        order.setOrderDate(LocalDateTime.now());
+        Order order = setUpOrder(user, requestDto, shoppingCart);
+        order.setOrderItems(setUpOrderItems(order, shoppingCart));
         order = orderRepository.save(order);
+        return orderMapper.toDto(order);
+    }
 
+    private Set<OrderItem> setUpOrderItems(Order order, ShoppingCart shoppingCart) {
         Set<OrderItem> orderItems = new HashSet<>(shoppingCart.getCartItems().size());
         for (CartItem cartItem : shoppingCart.getCartItems()) {
             Book book = cartItem.getBook();
-
             OrderItem orderItem = new OrderItem();
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setBook(book);
@@ -100,20 +98,34 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setPrice(book.getPrice());
             orderItemRepository.save(orderItem);
         }
-        order.setOrderItems(orderItems);
-        return orderMapper.toDto(order);
+        return orderItems;
     }
 
     @Override
+    @Transactional
     public OrderResponseDto updateOrderStatus(Long orderId, OrderUpdateRequestDto requestDto) {
         Order order = orderRepository.findById(orderId).orElseThrow(
                 () -> new EntityNotFoundException(
                         "Can't find order by current ID: " + orderId
                 )
         );
-        order.setStatus(Order.Status.valueOf(requestDto.getStatus()));
+        order.setStatus(Order.Status.valueOf(requestDto.getStatus().name()));
         orderRepository.save(order);
         return orderMapper.toDto(order);
+    }
+
+    private Order setUpOrder(
+            User user,
+            OrderPlaceRequestDto requestDto,
+            ShoppingCart shoppingCart
+    ) {
+        Order order = new Order();
+        order.setUser(user);
+        order.setStatus(Order.Status.valueOf(Order.Status.PENDING.name()));
+        order.setShippingAddress(requestDto.getShippingAddress());
+        order.setTotal(countTotalPrice(shoppingCart));
+        order.setOrderDate(LocalDateTime.now());
+        return order;
     }
 
     private BigDecimal countTotalPrice(ShoppingCart shoppingCart) {
