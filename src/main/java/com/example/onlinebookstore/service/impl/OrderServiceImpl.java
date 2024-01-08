@@ -121,7 +121,7 @@ public class OrderServiceImpl implements OrderService {
     ) {
         Order order = new Order();
         order.setUser(user);
-        order.setStatus(Order.Status.valueOf(Order.Status.PENDING.name()));
+        order.setStatus(Order.Status.PENDING);
         order.setShippingAddress(requestDto.getShippingAddress());
         order.setTotal(countTotalPrice(shoppingCart));
         order.setOrderDate(LocalDateTime.now());
