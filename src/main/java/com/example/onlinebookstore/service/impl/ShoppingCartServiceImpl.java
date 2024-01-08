@@ -75,13 +75,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         CartItem cartItem = findCartItemByCartItemId(cartItemId);
         cartItemRepository.delete(cartItem);
     }
-
-    private CartItem findCartItemByShoppingCartIdAndCartItemId(
-            Long cartItemId,
-            ShoppingCart shoppingCart
-    ) {
-        return cartItemRepository.findByIdAndShoppingCartId(cartItemId, shoppingCart.getId())
-    }
           
     private CartItem findCartItemByCartItemId(Long cartItemId) {
         return cartItemRepository.findById(cartItemId)
