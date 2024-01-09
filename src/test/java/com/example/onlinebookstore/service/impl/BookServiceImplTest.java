@@ -6,7 +6,11 @@ import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.BookMapper;
 import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.repository.BookRepository;
-import org.junit.jupiter.api.Assertions;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,20 +21,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceImplTest {
@@ -57,19 +55,19 @@ class BookServiceImplTest {
 
         BookResponseDto actual = bookService.save(createBookRequestDto);
 
-        Assertions.assertEquals(expected.getId(), actual.getId());
-        Assertions.assertEquals(expected.getTitle(), actual.getTitle());
-        Assertions.assertEquals(expected.getAuthor(), actual.getAuthor());
-        Assertions.assertEquals(expected.getDescription(), actual.getDescription());
-        Assertions.assertEquals(expected.getPrice(), actual.getPrice());
-        Assertions.assertEquals(expected.getIsbn(), actual.getIsbn());
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getTitle(), actual.getTitle());
+        assertEquals(expected.getAuthor(), actual.getAuthor());
+        assertEquals(expected.getDescription(), actual.getDescription());
+        assertEquals(expected.getPrice(), actual.getPrice());
+        assertEquals(expected.getIsbn(), actual.getIsbn());
     }
 
     @Test
     @DisplayName("""
             Verify the book title with valid ID was returned
             """)
-    void findById_WithValidBookId_ShouldReturnValidBookTitle() {
+    void findById_WithValidBookId_ShouldReturnValidBook() {
         Book book = getDefaultBook();
         String expected = book.getTitle();
         BookResponseDto bookResponseDto = getDefaultBookResponseDto();
@@ -78,7 +76,7 @@ class BookServiceImplTest {
 
         String actual = bookService.findById(book.getId()).getTitle();
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -96,7 +94,7 @@ class BookServiceImplTest {
 
         String expected = "The book with ID: " + invalidBookId + ", unfortunately was not be found.";
         String actual = exception.getMessage();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
         verify(bookRepository, times(1)).findById(invalidBookId);
         verifyNoMoreInteractions(bookRepository);
     }
@@ -117,18 +115,18 @@ class BookServiceImplTest {
 
         List<BookResponseDto> actual = bookService.findAll(pageable);
 
-        Assertions.assertEquals(expected.size(), actual.size());
-        Assertions.assertEquals(expected.get(0).getId(), actual.get(0).getId());
-        Assertions.assertEquals(expected.get(0).getTitle(), actual.get(0).getTitle());
-        Assertions.assertEquals(expected.get(0).getAuthor(), actual.get(0).getAuthor());
-        Assertions.assertEquals(expected.get(0).getPrice(), actual.get(0).getPrice());
-        Assertions.assertEquals(expected.get(0).getIsbn(), actual.get(0).getIsbn());
-        Assertions.assertEquals(expected.get(0).getDescription(), actual.get(0).getDescription());
+        assertEquals(expected.size(), actual.size());
+        assertEquals(expected.get(0).getId(), actual.get(0).getId());
+        assertEquals(expected.get(0).getTitle(), actual.get(0).getTitle());
+        assertEquals(expected.get(0).getAuthor(), actual.get(0).getAuthor());
+        assertEquals(expected.get(0).getPrice(), actual.get(0).getPrice());
+        assertEquals(expected.get(0).getIsbn(), actual.get(0).getIsbn());
+        assertEquals(expected.get(0).getDescription(), actual.get(0).getDescription());
     }
 
     @Test
     @DisplayName("""
-            Updated book price correctly and return response dto
+            Updated book price and return response dto
             """)
     void updateById_WithValidId_ShouldReturnBookResponseDto() {
         Book book = getDefaultBook();
@@ -143,14 +141,14 @@ class BookServiceImplTest {
         BookResponseDto actual = bookService.updateById(book.getId(), createBookRequestDto);
 
         EqualsBuilder.reflectionEquals(actual, expected);
-        Assertions.assertEquals(expected.getPrice(), actual.getPrice());
+        assertEquals(expected.getPrice(), actual.getPrice());
     }
 
     @Test
     @DisplayName("""
             updateById() should throw Exception with incorrect ID
             """)
-    void updateById_WithEmptyBook_ShouldThrowException() {
+    void updateById_WithNotValidId_ShouldThrowException() {
         Long invalidId = 100L;
         CreateBookRequestDto createBookRequestDto = getDefaultCreateBookRequestDto();
         when(bookRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -162,7 +160,7 @@ class BookServiceImplTest {
 
         String expected = "The book with ID: " + invalidId + ", unfortunately was not be founded.";
         String actual = exception.getMessage();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
 
