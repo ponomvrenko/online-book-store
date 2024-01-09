@@ -155,12 +155,11 @@ class CategoryServiceImplTest {
     }
 
     private Category getDefaultCategory() {
-        Category category = new Category();
-        category.setId(1L);
-        category.setName("Detective");
-        category.setDescription("Genre, describing the process of "
+        return new Category()
+            .setId(1L)
+            .setName("Detective")
+            .setDescription("Genre, describing the process of "
                 + "research mysterious event");
-        return category;
     }
 
     private CategoryRequestDto getDefaultCategoryRequestDto() {

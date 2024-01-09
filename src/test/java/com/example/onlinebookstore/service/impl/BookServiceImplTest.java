@@ -165,14 +165,13 @@ class BookServiceImplTest {
 
 
     private Book getDefaultBook() {
-        Book book = new Book();
-        book.setId(1L);
-        book.setTitle("Clean Code");
-        book.setAuthor("Robert Martin");
-        book.setDescription("Creation, analyze and refactor");
-        book.setPrice(BigDecimal.valueOf(1500));
-        book.setIsbn("978-5-4461-0960-9");
-        return book;
+        return new Book()
+            .setId(1L)
+            .setTitle("Clean Code")
+            .setAuthor("Robert Martin")
+            .setDescription("Creation, analyze and refactor")
+            .setPrice(BigDecimal.valueOf(1500))
+            .setIsbn("978-5-4461-0960-9");
     }
 
     private BookResponseDto getDefaultBookResponseDto() {
