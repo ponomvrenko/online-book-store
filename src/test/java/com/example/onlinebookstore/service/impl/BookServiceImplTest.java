@@ -1,5 +1,13 @@
 package com.example.onlinebookstore.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import com.example.onlinebookstore.dto.book.BookResponseDto;
 import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
@@ -10,7 +18,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,14 +28,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceImplTest {
@@ -39,7 +39,6 @@ class BookServiceImplTest {
     private BookRepository bookRepository;
     @Mock
     private BookMapper bookMapper;
-
 
     @Test
     @DisplayName("""
@@ -92,7 +91,8 @@ class BookServiceImplTest {
                 () -> bookService.findById(invalidBookId)
         );
 
-        String expected = "The book with ID: " + invalidBookId + ", unfortunately was not be found.";
+        String expected = "The book with ID: " + invalidBookId
+                + ", unfortunately was not be found.";
         String actual = exception.getMessage();
         assertEquals(expected, actual);
         verify(bookRepository, times(1)).findById(invalidBookId);
@@ -130,9 +130,9 @@ class BookServiceImplTest {
             """)
     void updateById_WithValidId_ShouldReturnBookResponseDto() {
         Book book = getDefaultBook();
-        BookResponseDto expected = getDefaultBookResponseDto();
         CreateBookRequestDto createBookRequestDto = getDefaultCreateBookRequestDto();
         createBookRequestDto.setPrice(BigDecimal.valueOf(2000));
+        BookResponseDto expected = getDefaultBookResponseDto();
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
         when(bookMapper.toEntity(createBookRequestDto)).thenReturn(book);
         when(bookMapper.toDto(book)).thenReturn(expected);
@@ -163,15 +163,14 @@ class BookServiceImplTest {
         assertEquals(expected, actual);
     }
 
-
     private Book getDefaultBook() {
         return new Book()
-            .setId(1L)
-            .setTitle("Clean Code")
-            .setAuthor("Robert Martin")
-            .setDescription("Creation, analyze and refactor")
-            .setPrice(BigDecimal.valueOf(1500))
-            .setIsbn("978-5-4461-0960-9");
+                .setId(1L)
+                .setTitle("Clean Code")
+                .setAuthor("Robert Martin")
+                .setDescription("Creation, analyze and refactor")
+                .setPrice(BigDecimal.valueOf(1500))
+                .setIsbn("978-5-4461-0960-9");
     }
 
     private BookResponseDto getDefaultBookResponseDto() {

@@ -1,15 +1,21 @@
 package com.example.onlinebookstore.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import com.example.onlinebookstore.dto.category.CategoryRequestDto;
 import com.example.onlinebookstore.dto.category.CategoryResponseDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.CategoryMapper;
 import com.example.onlinebookstore.model.Category;
 import com.example.onlinebookstore.repository.CategoryRepository;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,12 +27,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceImplTest {
@@ -86,7 +86,8 @@ class CategoryServiceImplTest {
                 () -> categoryService.findById(invalidCategoryId)
         );
 
-        String expected = "Category with ID: " + invalidCategoryId + ", unfortunately was not be found.";
+        String expected = "Category with ID: " + invalidCategoryId
+                + ", unfortunately was not be found.";
         String actual = exception.getMessage();
         assertEquals(expected, actual);
         verify(categoryRepository, times(1)).findById(invalidCategoryId);
@@ -121,9 +122,9 @@ class CategoryServiceImplTest {
             """)
     void updateById_WithValidId_ShouldReturnBookResponseDto() {
         Category category = getDefaultCategory();
-        CategoryResponseDto expected = getDefaultCategoryResponseDto();
         CategoryRequestDto requestDto = getDefaultCategoryRequestDto();
         requestDto.setName("Detective genre");
+        CategoryResponseDto expected = getDefaultCategoryResponseDto();
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
         when(categoryMapper.toEntity(requestDto)).thenReturn(category);
         when(categoryMapper.toDto(category)).thenReturn(expected);
