@@ -52,9 +52,7 @@ class CategoryServiceImplTest {
 
         CategoryResponseDto actual = categoryService.save(requestDto);
 
-        assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getDescription(), actual.getDescription());
+        EqualsBuilder.reflectionEquals(actual, expected, "id");
     }
 
     @Test
@@ -111,9 +109,7 @@ class CategoryServiceImplTest {
         List<CategoryResponseDto> actual = categoryService.getAll(pageable);
 
         assertEquals(expected.size(), actual.size());
-        assertEquals(expected.get(0).getId(), actual.get(0).getId());
-        assertEquals(expected.get(0).getName(), actual.get(0).getName());
-        assertEquals(expected.get(0).getDescription(), actual.get(0).getDescription());
+        EqualsBuilder.reflectionEquals(actual.get(0), expected.get(0), "id");
     }
 
     @Test

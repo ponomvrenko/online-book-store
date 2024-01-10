@@ -54,12 +54,7 @@ class BookServiceImplTest {
 
         BookResponseDto actual = bookService.save(createBookRequestDto);
 
-        assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getTitle(), actual.getTitle());
-        assertEquals(expected.getAuthor(), actual.getAuthor());
-        assertEquals(expected.getDescription(), actual.getDescription());
-        assertEquals(expected.getPrice(), actual.getPrice());
-        assertEquals(expected.getIsbn(), actual.getIsbn());
+        EqualsBuilder.reflectionEquals(actual, expected, "id");
     }
 
     @Test
@@ -116,12 +111,7 @@ class BookServiceImplTest {
         List<BookResponseDto> actual = bookService.findAll(pageable);
 
         assertEquals(expected.size(), actual.size());
-        assertEquals(expected.get(0).getId(), actual.get(0).getId());
-        assertEquals(expected.get(0).getTitle(), actual.get(0).getTitle());
-        assertEquals(expected.get(0).getAuthor(), actual.get(0).getAuthor());
-        assertEquals(expected.get(0).getPrice(), actual.get(0).getPrice());
-        assertEquals(expected.get(0).getIsbn(), actual.get(0).getIsbn());
-        assertEquals(expected.get(0).getDescription(), actual.get(0).getDescription());
+        EqualsBuilder.reflectionEquals(actual.get(0), expected.get(0), "id");
     }
 
     @Test
