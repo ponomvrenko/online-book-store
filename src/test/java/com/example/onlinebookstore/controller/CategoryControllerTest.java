@@ -6,21 +6,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.onlinebookstore.dto.category.CategoryResponseDto;
+import com.example.onlinebookstore.model.Role;
+import com.example.onlinebookstore.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import javax.sql.DataSource;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -78,6 +81,22 @@ class CategoryControllerTest {
                 .setDescription("Science genre");
     }
 
+    @BeforeEach
+    void setUp() {
+        User user = new User();
+        user.setId(3L);
+        user.setEmail("superjavadev@gmail.com");
+        user.setPassword("superStrongPass");
+        Role role = new Role();
+        role.setId(3L);
+        role.setName(Role.RoleName.USER);
+        user.setRoles(Set.of(role));
+        Authentication authentication
+                = new UsernamePasswordAuthenticationToken(user,
+                user.getPassword(), user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
     @AfterAll
     static void afterAll(
             @Autowired DataSource dataSource
@@ -109,7 +128,7 @@ class CategoryControllerTest {
     @DisplayName("Get all categories")
     void getAll_ValidRequest_Success() throws Exception {
         MvcResult mvcResult = mockMvc.perform(
-                        get("/api/categories")
+                        get("/categories")
                 )
                 .andExpect(status().isOk())
                 .andReturn();
