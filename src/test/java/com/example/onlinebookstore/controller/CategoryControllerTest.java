@@ -62,17 +62,17 @@ class CategoryControllerTest {
             );
         }
 
-        CategoryResponseDto publicist = new CategoryResponseDto()
+        publicist = new CategoryResponseDto()
                 .setId(1L)
                 .setName("Publicist")
                 .setDescription("Journalistic genre");
 
-        CategoryResponseDto drama = new CategoryResponseDto()
+        drama = new CategoryResponseDto()
                 .setId(2L)
                 .setName("Drama")
                 .setDescription("Drama genre");
 
-        CategoryResponseDto science = new CategoryResponseDto()
+        science = new CategoryResponseDto()
                 .setId(3L)
                 .setName("Science")
                 .setDescription("Science genre");
