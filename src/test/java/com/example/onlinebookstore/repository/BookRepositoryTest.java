@@ -1,6 +1,7 @@
 package com.example.onlinebookstore.repository;
 
 import com.example.onlinebookstore.model.Book;
+import com.example.onlinebookstore.model.Category;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,56 +11,52 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.jdbc.Sql;
+import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class BookRepositoryTest {
+class  BookRepositoryTest {
 
     @Autowired
     private BookRepository bookRepository;
 
     @Test
-    @DisplayName("""
-            Find all books
-            """)
-    void findAll() {
-        Pageable pageable = PageRequest.of(0, 5);
-        Page<Book> books = bookRepository.findAll(pageable);
-
-    }
-
-
-    @Test
-    void findById() {
-        Book expectedBook = getDefaultBook();
-        bookRepository.save(expectedBook);
-
-        Book actualBook = bookRepository.findById(expectedBook.getId()).get();
-
-        assertEquals(expectedBook.getId(), actualBook.getId());
-        assertEquals(expectedBook.getTitle(), actualBook.getTitle());
-    }
-
-
-    @Test
-        // 6:17
-    void findAllByCategoriesId() {
-
-    }
-
-
-    private Book getDefaultBook() {
-        return new Book()
+    @DisplayName("Find books by category with existing category")
+    @Sql(scripts = {
+            "classpath:database/books/add-three-books.sql",
+            "classpath:database/categories/add-categories.sql",
+            "classpath:database/books-categories/add-books-categories.sql"
+    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = {
+            "classpath:database/books-categories/delete-books-categories.sql",
+            "classpath:database/categories/delete-categories.sql",
+            "classpath:database/books/delete-books.sql"
+    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void findAllByCategoriesId_WithScienceCategory_ShouldReturnOneBook() {
+        Book scienceBook = new Book()
                 .setId(1L)
-                .setTitle("Clean Code")
-                .setAuthor("Robert Martin")
-                .setDescription("Creation, analyze and refactor")
-                .setPrice(BigDecimal.valueOf(1500))
-                .setIsbn("978-5-4461-0960-9");
+                .setTitle("Critical thinking")
+                .setAuthor("Jonathan Haber")
+                .setIsbn("978-617-8025-53-3")
+                .setPrice(BigDecimal.valueOf(400))
+                .setDescription("Be critical to everything");
+
+        Category scienceCategory = new Category()
+                .setId(1L)
+                .setName("Science")
+                .setDescription("Science genre");
+
+        List<Book> expected = List.of(scienceBook);
+        List<Book> actual = bookRepository.findAllByCategoriesId(scienceCategory.getId());
+
+        assertEquals(1, actual.size());
+        EqualsBuilder.reflectionEquals(expected.get(0), actual.get(0), "id");
     }
 }
