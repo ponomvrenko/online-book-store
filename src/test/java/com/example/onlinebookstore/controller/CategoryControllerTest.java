@@ -50,15 +50,15 @@ class CategoryControllerTest {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("database/books/add-three-books.sql")
+                    new ClassPathResource("classpath:database/books/add-three-books.sql")
             );
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("database/books/add-categories.sql")
+                    new ClassPathResource("classpath:database/books/add-categories.sql")
             );
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("database/books/add-books-categories.sql")
+                    new ClassPathResource("classpath:database/books/add-books-categories.sql")
             );
         }
 
@@ -91,15 +91,15 @@ class CategoryControllerTest {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("database/books/delete-books.sql")
+                    new ClassPathResource("classpath:database/books/delete-books.sql")
             );
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("database/categories/delete-categories.sql")
+                    new ClassPathResource("classpath:database/categories/delete-categories.sql")
             );
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("database/categories/delete-books-categories.sql")
+                    new ClassPathResource("classpath:database/categories/delete-books-categories.sql")
             );
         }
     }
