@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.onlinebookstore.dto.category.CategoryResponseDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -25,7 +26,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CategoryControllerTest {
@@ -41,24 +41,24 @@ class CategoryControllerTest {
             @Autowired DataSource dataSource,
             @Autowired WebApplicationContext applicationContext
     ) throws SQLException {
+        teardown(dataSource);
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(applicationContext)
                 .apply(springSecurity())
                 .build();
-        teardown(dataSource);
         try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("classpath:database/books/add-three-books.sql")
+                    new ClassPathResource("database/books/add-three-books.sql")
             );
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("classpath:database/books/add-categories.sql")
+                    new ClassPathResource("database/categories/add-categories.sql")
             );
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("classpath:database/books/add-books-categories.sql")
+                    new ClassPathResource("database/books-categories/add-books-categories.sql")
             );
         }
 
@@ -91,15 +91,15 @@ class CategoryControllerTest {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("classpath:database/categories/delete-books-categories.sql")
+                    new ClassPathResource("database/books-categories/delete-books-categories.sql")
             );
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("classpath:database/categories/delete-categories.sql")
+                    new ClassPathResource("database/categories/delete-categories.sql")
             );
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("classpath:database/books/delete-books.sql")
+                    new ClassPathResource("database/books/delete-books.sql")
             );
         }
     }
