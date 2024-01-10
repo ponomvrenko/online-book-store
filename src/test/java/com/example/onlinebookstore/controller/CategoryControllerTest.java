@@ -91,7 +91,7 @@ class CategoryControllerTest {
             connection.setAutoCommit(true);
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("classpath:database/books/delete-books.sql")
+                    new ClassPathResource("classpath:database/categories/delete-books-categories.sql")
             );
             ScriptUtils.executeSqlScript(
                     connection,
@@ -99,7 +99,7 @@ class CategoryControllerTest {
             );
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("classpath:database/categories/delete-books-categories.sql")
+                    new ClassPathResource("classpath:database/books/delete-books.sql")
             );
         }
     }
