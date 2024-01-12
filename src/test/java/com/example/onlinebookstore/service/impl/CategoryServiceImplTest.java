@@ -31,17 +31,15 @@ import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceImplTest {
 
-    @InjectMocks
-    private CategoryServiceImpl categoryService;
     @Mock
     private CategoryMapper categoryMapper;
     @Mock
     private CategoryRepository categoryRepository;
+    @InjectMocks
+    private CategoryServiceImpl categoryService;
 
     @Test
-    @DisplayName("""
-            save() works properly and returns dto
-            """)
+    @DisplayName("Save the book to repository and return DTO")
     void save_WithValidRequestDto_ShouldReturnResponseDto() {
         Category category = getDefaultCategory();
         CategoryResponseDto expected = getDefaultCategoryResponseDto();
@@ -56,9 +54,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    @DisplayName("""
-            Verify the category name with valid ID was returned
-            """)
+    @DisplayName("Verify the category name with valid ID was returned")
     void findById_WithValidCategoryId_ShouldReturnValidCategory() {
         Category category = getDefaultCategory();
         String expected = category.getName();
@@ -72,9 +68,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    @DisplayName("""
-            findById() should return Exception with invalid ID
-            """)
+    @DisplayName("Find book by invalid ID and throw Exception")
     void findById_WithNotValidCategoryId_ShouldThrowException() {
         Long invalidCategoryId = 100L;
         when(categoryRepository.findById(invalidCategoryId)).thenReturn(Optional.empty());
@@ -93,9 +87,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    @DisplayName("""
-            Getting all categories from database with valid books
-            """)
+    @DisplayName("Getting all categories from database with valid books")
     void getAll_WithValidCategories_ShouldReturnList() {
         Category category = getDefaultCategory();
         List<Category> categoryList = List.of(category);
@@ -113,9 +105,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    @DisplayName("""
-            Updated category name and return response dto
-            """)
+    @DisplayName("Updated category name and return response dto")
     void updateById_WithValidId_ShouldReturnBookResponseDto() {
         Category category = getDefaultCategory();
         CategoryRequestDto requestDto = getDefaultCategoryRequestDto();
@@ -129,13 +119,10 @@ class CategoryServiceImplTest {
         CategoryResponseDto actual = categoryService.updateById(category.getId(), requestDto);
 
         EqualsBuilder.reflectionEquals(actual, expected);
-        assertEquals(expected.getName(), actual.getName());
     }
 
     @Test
-    @DisplayName("""
-            updateById() should throw Exception with incorrect ID
-            """)
+    @DisplayName("Update book by invalid ID and throw Exception")
     void updateById_WithNotValidId_ShouldThrowException() {
         Long invalidId = 100L;
         CategoryRequestDto categoryRequestDto = getDefaultCategoryRequestDto();

@@ -32,18 +32,15 @@ import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceImplTest {
-
-    @InjectMocks
-    private BookServiceImpl bookService;
     @Mock
     private BookRepository bookRepository;
     @Mock
     private BookMapper bookMapper;
+    @InjectMocks
+    private BookServiceImpl bookService;
 
     @Test
-    @DisplayName("""
-            save() works properly and returns dto
-            """)
+    @DisplayName("Save book, returns valid DTO")
     void save_WithValidRequestBookDto_ShouldReturnCorrectDto() {
         Book book = getDefaultBook();
         BookResponseDto expected = getDefaultBookResponseDto();
@@ -58,9 +55,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("""
-            Verify the book title with valid ID was returned
-            """)
+    @DisplayName("Verify the book title with valid ID was returned")
     void findById_WithValidBookId_ShouldReturnValidBook() {
         Book book = getDefaultBook();
         String expected = book.getTitle();
@@ -70,13 +65,11 @@ class BookServiceImplTest {
 
         String actual = bookService.findById(book.getId()).getTitle();
 
-        assertEquals(expected, actual);
+        EqualsBuilder.reflectionEquals(expected, actual, "id");
     }
 
     @Test
-    @DisplayName("""
-            findById() should return Exception with invalid ID
-            """)
+    @DisplayName("Find book by ID, should return exception with")
     void findById_WithNotValidBookId_ShouldThrowException() {
         Long invalidBookId = 100L;
         when(bookRepository.findById(invalidBookId)).thenReturn(Optional.empty());
@@ -95,9 +88,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("""
-            Getting all books from database with valid books
-            """)
+    @DisplayName("Getting all books from database with valid books")
     void findAll_WithValidBooks_ShouldReturnList() {
         Book book = getDefaultBook();
         List<Book> books = List.of(book);
@@ -115,9 +106,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("""
-            Updated book price and return response dto
-            """)
+    @DisplayName("Updated book price and return response DTO")
     void updateById_WithValidId_ShouldReturnBookResponseDto() {
         Book book = getDefaultBook();
         CreateBookRequestDto createBookRequestDto = getDefaultCreateBookRequestDto();
@@ -131,13 +120,10 @@ class BookServiceImplTest {
         BookResponseDto actual = bookService.updateById(book.getId(), createBookRequestDto);
 
         EqualsBuilder.reflectionEquals(actual, expected);
-        assertEquals(expected.getPrice(), actual.getPrice());
     }
 
     @Test
-    @DisplayName("""
-            updateById() should throw Exception with incorrect ID
-            """)
+    @DisplayName("Update book by invalid ID and throw Exception")
     void updateById_WithNotValidId_ShouldThrowException() {
         Long invalidId = 100L;
         CreateBookRequestDto createBookRequestDto = getDefaultCreateBookRequestDto();

@@ -8,15 +8,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.onlinebookstore.dto.category.CategoryResponseDto;
 import com.example.onlinebookstore.model.Role;
 import com.example.onlinebookstore.model.User;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import javax.sql.DataSource;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
@@ -134,12 +138,12 @@ class CategoryControllerTest {
                 .andReturn();
 
         List<CategoryResponseDto> expected = List.of(publicist, drama, science);
-        CategoryResponseDto[] actual = objectMapper.readValue(
+        List<CategoryResponseDto> actual = objectMapper.readValue(
                 mvcResult.getResponse().getContentAsByteArray(),
-                CategoryResponseDto[].class
+                new TypeReference<>() {}
         );
 
-        assertEquals(3, actual.length);
-        assertEquals(expected, Arrays.stream(actual).toList());
+        assertEquals(3, actual.size());
+        assertEquals(expected, actual);
     }
 }
