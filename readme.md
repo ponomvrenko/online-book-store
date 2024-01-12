@@ -2,12 +2,16 @@
 _The purpose of this API is to provide access to data, functionality, and services that enhance customer experience and drive business growth._
 ## 📃Table of Contents
 
-- [Introduction](#introduction)
-- [Prerequisites](#prerequisites)
+- [Introduction](#Introduction)
+- [️Feature](#feature)
+- [Technologies Used](#technologies-used)
+- [Api functionalities](#api-functionalities)
+- [Prerequisites](#Prerequisites)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [Challenges and Solutions](#challenges-and-solutions)
+- [Challenges and Solutions](#challenges-and-solutions-in-building-our-online-book-store)
+- [Possible improvements](#possible-improvements)
 - [Summary](#summary)
 
 ## ✍️Introduction
@@ -161,7 +165,7 @@ If you want to test the API without installation, go to the [Swagger UI*(here wi
 
 We welcome contributions from the community to enhance the Online Book Store project. Whether you want to fix a bug, improve an existing feature, or propose a new feature, your contributions are valuable to us. You can follow the installation guide and create a Pull Request to the project. If you want to contact for more information and cooperation in development: [danil.ponomvrenko@gmail.com](mailto:danil.ponomvrenko@gmail.com)
 
-## Challenges and Solutions in Building Our Online Book Store🦾
+## 🦾Challenges and Solutions in Building Our Online Book Store
 
 Building the Online Book Store project was a fulfilling endeavor, marked by various challenges. In this article, we'll briefly explore the hurdles we encountered during development and how we addressed them to create a robust e-commerce platform.
 
