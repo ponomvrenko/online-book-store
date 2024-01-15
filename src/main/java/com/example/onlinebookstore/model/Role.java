@@ -27,7 +27,7 @@ public class Role implements GrantedAuthority {
         return "ROLE_" + name.name();
     }
 
-    private enum RoleName {
+    public enum RoleName {
         ADMIN,
         USER
     }
