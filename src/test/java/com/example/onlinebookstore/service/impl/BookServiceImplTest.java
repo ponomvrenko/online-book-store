@@ -69,7 +69,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("Find book by ID, should return exception with")
+    @DisplayName("Find book by invalid ID, should return exception")
     void findById_WithNotValidBookId_ShouldThrowException() {
         Long invalidBookId = 100L;
         when(bookRepository.findById(invalidBookId)).thenReturn(Optional.empty());
