@@ -20,12 +20,12 @@ import org.testcontainers.shaded.org.apache.commons.lang3.builder.EqualsBuilder;
 
 @ExtendWith(MockitoExtension.class)
 class ShoppingCartServiceImplTest {
-    @InjectMocks
-    private ShoppingCartServiceImpl shoppingCartService;
     @Mock
     private ShoppingCartRepository shoppingCartRepository;
     @Mock
     private ShoppingCartMapper shoppingCartMapper;
+    @InjectMocks
+    private ShoppingCartServiceImpl shoppingCartService;
 
     @Test
     @DisplayName("Returns valid shopping cart with valid user ID")
