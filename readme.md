@@ -52,6 +52,8 @@ Our application leverages several cutting-edge technologies, including:
 
 **JUnit:** A widely used testing framework for writing and running unit tests.
 
+**Mockito:** The framework allows the creation of test double objects in automated unit tests.
+
 **HSQLDB (for testing):** An in-memory database used for testing data access logic.
 
 **Spring Boot Starter Test:** Provides testing support for Spring Boot applications.
@@ -105,8 +107,8 @@ In our Online Book Store project, we've diligently followed REST (Representation
 - `GET: /api/books/search` - The endpoint for searching books by parameters with User authority.
 
 **CategoryController:** receive and handle requests for adding, updating, getting categories and getting all books by category.
-+ `GET: /api/categories` - The endpoint to look at all categories (User authority)
-+ `GET: /api/categories/{id}` - The endpoint for searching a specific category (User authority)
++ `GET: /api/categories` - The endpoint to look at all categories with User authority.
++ `GET: /api/categories/{id}` - The endpoint for searching a specific category with User authority.z
 + `POST: /api/categories` - The endpoint for creating a new category with Admin & User authority.
 + `PUT: /api/categories/{id}` - The endpoint for updating information about specific category with Admin authority.
 + `DELETE: /api/categories/{id}` - The endpoint for deleting categories with Admin authority.
