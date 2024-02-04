@@ -2,35 +2,41 @@
 _The purpose of this API is to provide access to data, functionality, and services that enhance customer experience and drive business growth._
 ## 📃Table of Contents
 
-- [Introduction](#Introduction)
-- [️Feature](#feature)
-- [Technologies Used](#technologies-used)
-- [Api functionalities](#api-functionalities)
-- [Prerequisites](#Prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [Challenges and Solutions](#challenges-and-solutions-in-building-our-online-book-store)
-- [Possible improvements](#possible-improvements)
-- [Summary](#summary)
+- **[Introduction](#Introduction)**
+- **[️Feature](#feature)**
+- **[Technologies Used](#technologies-used)**
+- **[Api functionalities](#api-functionalities)**
+- **[Prerequisites](#Prerequisites)**
+- **[Installation](#installation)**
+- **[Usage](#usage)**
+- **[Contributing](#contributing)**
+- **[Challenges and Solutions](#challenges-and-solutions-in-building-our-online-book-store)**
+- **[Possible improvements](#possible-improvements)**
+- **[Summary](#summary)**
 
 ## ✍️Introduction
 Greetings and welcome to the Online Book Store project! This is a resilient and secure Java Spring Boot application meticulously crafted to offer an outstanding online shopping experience for avid readers. Incorporating an array of features and cutting-edge technologies, our project aims to deliver a flawless and secure e-commerce platform for users. In the following sections, we'll acquaint you with the essential aspects and functionalities of our application.
 
-## 🎖️Feature
+
+
+## 🎖️Features
 
 1. **Shopping Cart:** Our Online Book Store allows users to add books to their shopping carts. You can easily browse through our extensive collection of books, select your favorites, and add them to your cart. The cart is fully functional, enabling users to view, edit, and finalize their purchases before proceeding to checkout.
 
+
 2. **Order Management:** Once you've filled your shopping cart with the books you desire, our application provides a streamlined order management system. You can review your orders and add them.
+
 
 3. **Book Management with Pagination and Sorting:** We understand the importance of efficient book discovery. Our application offers a sophisticated search functionality that allows users to find all books by categories, author, title, or by id. With pagination support, you can explore a vast catalog of books without overwhelming your search results.
 
+
 4. **Security and JWT Tokens for User Auth:** Security is paramount in our application. We've implemented Spring Security to safeguard your data and transactions. JWT (JSON Web Tokens) are used for secure authentication and authorization, ensuring that only authorized users can access sensitive functionalities.
+
+---
 
 ## 💻Technologies Used
 
-Our application leverages several cutting-edge technologies, including:
-
+*Our application leverages several cutting-edge technologies, including:*
 
 ***📌Core Spring Boot Dependencies:***
 
@@ -94,6 +100,8 @@ Springdoc OpenAPI Starter WebMVC UI: Generates and serves API documentation usin
 
 **Spring Boot Docker Compose:** Simplifies the deployment of the application in Docker containers.
 
+---
+
 ## 🛜Api Functionalities
 
 In our Online Book Store project, we've diligently followed REST (Representational State Transfer) principles in designing our controllers. Controllers are essential components responsible for handling HTTP requests and responses.
@@ -143,14 +151,14 @@ List the prerequisites required to run your application. Include things like:
 ## ⬇️Installation
 
 1. Clone repository:
-   - Open IDEA → File → New Project from Version Control and insert link: [https://github.com/ponomvrenko/online-book-store](https://github.com/ponomvrenko/online-book-store).
+   - `Open IDEA` → `File` → `New Project from Version Control` and insert link: [https://github.com/ponomvrenko/online-book-store](https://github.com/ponomvrenko/online-book-store).
    - Or clone from the console with the command: `git clone https://github.com/ponomvrenko/online-book-store`
 2. Build project and download dependencies for Maven with command: `mvn clean install`
 3. Docker Compose your project: `docker compose build` and `docker compose up`
 
 ## 🗂️Usage
 
-If you want to test the API without installation, go to the [Swagger UI*(here will be link after HW with AWS)](...), where you can interact with all endpoints thanks to OpenAPI.
+If you want to test the API without installation, go to the [Swagger UI](ec2-54-198-171-11.compute-1.amazonaws.com/api/swagger-ui/index.html#/), where you can interact with all endpoints thanks to OpenAPI.
 
 - Create your own user: Use endpoint `auth/register` to register a user and stick to these rules:
   1. `firstName` length between 1 and 255
@@ -159,47 +167,43 @@ If you want to test the API without installation, go to the [Swagger UI*(here wi
   4. `password` minimum length is 4
   5. `shippingAddress` is optional at this time
 
-- For access to all endpoints, use admin credentials in `auth/login`:
-  - Username: `alice@gmail.com`
-  - Password: `securePassword123`
-
 ## 🫂Contributing
 
 We welcome contributions from the community to enhance the Online Book Store project. Whether you want to fix a bug, improve an existing feature, or propose a new feature, your contributions are valuable to us. You can follow the installation guide and create a Pull Request to the project. If you want to contact for more information and cooperation in development: [danil.ponomvrenko@gmail.com](mailto:danil.ponomvrenko@gmail.com)
 
 ## 🦾Challenges and Solutions in Building Our Online Book Store
 
-Building the Online Book Store project was a fulfilling endeavor, marked by various challenges. In this article, we'll briefly explore the hurdles we encountered during development and how we addressed them to create a robust e-commerce platform.
+*Building the Online Book Store project was a fulfilling endeavor, marked by various challenges. In this article, we'll briefly explore the hurdles we encountered during development and how we addressed them to create a robust e-commerce platform.*
 
-### ※Challenge 1: Data Modeling and Build Different Views from Our Domain Models
+### 🔸Challenge 1: Data Modeling and Build Different Views from Our Domain Models
 
 **Issue:** Designing a flexible data model for books, users, orders, and categories was complex and showing the user only necessary data.
 
 **Solution:** We used Spring Data JPA and Liquibase to create an adaptable schema and pattern Dto.
 
-### ※Challenge 2: Security
+### 🔸Challenge 2: Security
 
 **Issue:** Ensuring data security and user authentication was paramount.
 
 **Solution:** Spring Security and JWT tokens were implemented for robust protection.
 
-### ※Challenge 3: Exception Handling
+### 🔸Challenge 3: Exception Handling
 
 **Issue:** Systematic handling of errors and exceptions was crucial because they need to be handled at the application-wide level, not just on a single controller.
 
 **Solution:** We developed a global handler and custom exceptions for better error reporting.
 
-### ※Challenge 4: Complex Configuration
+### 🔸Challenge 4: Complex Configuration
 **Issue:** Spring Security can be intricate to configure, particularly when dealing with custom authentication and authorization requirements.
 
 **Solution:** The Spring Security configuration was documented comprehensively, providing thorough explanations for each aspect. This documentation offers clarity for both contributors and users on the setup of authentication and authorization.
 
-### ※Challenge 5: Token-Based Authentication
+### 🔸Challenge 5: Token-Based Authentication
 **Issue:** The integration of JWT (JSON Web Tokens) for token-based authentication posed challenges related to token creation, validation, and secure storage.
 
 **Solution:** JWT was adopted as the authentication mechanism, adhering to industry best practices. Established libraries were utilized, and security guidelines for token creation, validation, and storage were followed.
 
-### ※Challenge 6: User Management
+### 🔸Challenge 6: User Management
 **Issue:** The efficient management of user roles, permissions, and access control within the API needed a structured approach.
 
 **Solution:** A custom `UserDetailsService` was implemented to manage user roles, permissions, and access control. This customization allowed for user management tailored to specific requirements while maintaining security.
@@ -258,6 +262,6 @@ Building the Online Book Store project was a fulfilling endeavor, marked by vari
 
 Implementing these possible improvements can contribute to the long-term success and growth of the Online Book Store, providing an even more robust and user-friendly experience.
 
-## Summary
+## 🏁Summary
 
 In summary, our project overcame these challenges through adaptable data modeling, strong security measures, systematic error handling. It stands as a testament to our commitment to best practices in software development, offering users a secure and enjoyable shopping experience while adhering to REST principles.
