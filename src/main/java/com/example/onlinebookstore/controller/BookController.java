@@ -1,6 +1,8 @@
 package com.example.onlinebookstore.controller;
 
+import com.example.onlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.example.onlinebookstore.dto.book.BookResponseDto;
+import com.example.onlinebookstore.dto.book.BookSearchParametersDto;
 import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.onlinebookstore.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,6 +45,14 @@ public class BookController {
             description = "Return a book by identifier")
     public BookResponseDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
+    @GetMapping("/search")
+    @Operation(summary = "Search book with given parameters",
+            description = "Returns a book that matches given parameters")
+    public List<BookDtoWithoutCategoryIds> search(BookSearchParametersDto searchParameters) {
+        return bookService.search(searchParameters);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
