@@ -158,7 +158,7 @@ List the prerequisites required to run your application. Include things like:
 
 ## 🗂️Usage
 
-If you want to test the API without installation, go to the [Swagger UI](ec2-54-198-171-11.compute-1.amazonaws.com/api/swagger-ui/index.html#/), where you can interact with all endpoints thanks to OpenAPI.
+If you want to test the API without installation, go to the [Swagger UI](http://ec2-54-198-171-11.compute-1.amazonaws.com/api/swagger-ui/index.html#/), where you can interact with all endpoints thanks to OpenAPI.
 
 - Create your own user: Use endpoint `auth/register` to register a user and stick to these rules:
   1. `firstName` length between 1 and 255
